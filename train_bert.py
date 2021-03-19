@@ -11,8 +11,8 @@ from bert import BertModelLayer
 import matplotlib.pyplot as plt
 from bert.loader import StockBertConfig, map_stock_config_to_params, load_stock_weights
 
-from bert.input_pipeline import InputPipeline
-from bert.model import BERT
+from bert_model.input_pipeline import InputPipeline
+from bert_model.model import BERT
 
 nltk.download('stopwords')
 nltk.download('punkt')
