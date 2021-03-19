@@ -1,3 +1,22 @@
+import os
+import re
+import bert
+import nltk
+import tqdm
+import argparse
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from bert import BertModelLayer
+import matplotlib.pyplot as plt
+from bert.loader import StockBertConfig, map_stock_config_to_params, load_stock_weights
+
+from bert.input_pipeline import InputPipeline
+from bert.model import BERT
+
+nltk.download('stopwords')
+nltk.download('punkt')
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-epoch',
