@@ -15,16 +15,22 @@ class InputPipeline:
     self.train_data['comment_text'] = self.train_data['comment_text'].astype(str)
     self.test_data['comment_text'] = self.test_data['comment_text'].astype(str)
     
-    self.train_data['cleaned_comment'] = [self.clean_comment(comment) for comment in self.train_data["comment_text"]]
-    self.test_data['cleaned_comment'] = [self.clean_comment(comment) for comment in self.test_data["comment_text"]]  
+    self.train_data['cleaned_comment'] = [self.clean_comment(comment)\
+                                          for comment in self.train_data["comment_text"]]
+    self.test_data['cleaned_comment'] = [self.clean_comment(comment)\
+                                         for comment in self.test_data["comment_text"]]  
 
-    self.train_data_tokenized_comments = [self.tokenize_comment(comment) for comment in self.train_data['cleaned_comment']]
+    self.train_data_tokenized_comments = [self.tokenize_comment(comment)\
+                                          for comment in self.train_data['cleaned_comment']]
     self.train_labels = self.train_data.drop(columns=['comment_text','cleaned_comment','id'],axis=1).values
-    self.test_data_tokenized_comments = [self.tokenize_comment(comment) for comment in self.test_data['cleaned_comment']]
+    self.test_data_tokenized_comments = [self.tokenize_comment(comment)\
+                                         for comment in self.test_data['cleaned_comment']]
     self.test_labels = self.test_data.drop(columns=['comment_text','cleaned_comment','id'],axis=1).values
 
-    self.train_input = tf.keras.preprocessing.sequence.pad_sequences(self.train_data_tokenized_comments, padding='post', maxlen=self.max_len)
-    self.test_input = tf.keras.preprocessing.sequence.pad_sequences(self.test_data_tokenized_comments, padding='post', maxlen=self.max_len)
+    self.train_input = tf.keras.preprocessing.sequence.pad_sequences(self.train_data_tokenized_comments,\
+                                                                     padding='post', maxlen=self.max_len)
+    self.test_input = tf.keras.preprocessing.sequence.pad_sequences(self.test_data_tokenized_comments,\
+                                                                    padding='post', maxlen=self.max_len)
 
   def clean_comment(self,comment):
     comment = nltk.word_tokenize(comment.lower())
@@ -35,4 +41,6 @@ class InputPipeline:
     return comment     
   
   def tokenize_comment(self,comment):
-    return self.tokenizer.convert_tokens_to_ids(["[CLS]"] + self.tokenizer.tokenize(comment)[:self.max_len] + ["[SEP]"])
+    return self.tokenizer.convert_tokens_to_ids(["[CLS]"] + \
+                                                self.tokenizer.tokenize(comment)\
+                                                [:self.max_len] + ["[SEP]"])
