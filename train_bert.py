@@ -1,19 +1,3 @@
-import os
-import re
-import bert
-import nltk
-import tqdm
-import argparse
-import numpy as np
-import pandas as pd
-import tensorflow as tf
-from bert import BertModelLayer
-import matplotlib.pyplot as plt
-from bert.loader import StockBertConfig, map_stock_config_to_params, load_stock_weights
-
-nltk.download('stopwords')
-nltk.download('punkt')
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-epoch',
@@ -40,7 +24,7 @@ def parse_args():
                         metavar='',
                         default = 'train.csv')
     
-    parser.add_argument('-img_dir',
+    parser.add_argument('-test_img_dir',
                         '--test_path',
                         type=str,
                         metavar='',
@@ -57,7 +41,8 @@ def parse_args():
                         type=str,
                         metavar='',
                         default = "uncased_L-12_H-768_A-12/vocab.txt")
-  parser.add_argument('-b_config',
+    
+    parser.add_argument('-b_config',
                         '--bert_config',
                         type=str,
                         metavar='',
@@ -83,10 +68,11 @@ def train_bert():
   plt.ylabel('count')
   plt.show()
     
-  tokenizer = bert.tokenization.bert_tokenization.FullTokenizer(vocab_file=os.path.join(args.bert_main_checkpoint, args.bert_vocab))
+  tokenizer = bert.tokenization.bert_tokenization.FullTokenizer(vocab_file=args.bert_vocab)
   pipeline = InputPipeline(train_data = train_data,
                          test_data = test_data,
-                         tokenizer = tokenizer)
+                         tokenizer = tokenizer,
+                         max_length = args.max_length)
   
   bert_model = BERT(max_len=args.max_length, bert_checkpoint=args.bert_main_checkpoint,bert_config=args.bert_config)
   bert_model.compile(
